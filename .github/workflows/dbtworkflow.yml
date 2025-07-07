@@ -8,8 +8,8 @@ jobs:
       - name: Checkout feature branch
         uses: actions/checkout@v4
         with:
-          ref: feature/my-branch
-
+          ref: dbt
+      
       - name: Generate file
         run: |
           echo "Hello from feature branch" > saved.txt
