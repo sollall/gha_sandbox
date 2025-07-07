@@ -1,42 +1,27 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
-
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  transfer-file-between-branches:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name }}
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: feature/my-branch
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Generate file
         run: |
-          git rev-parse --abbrev-ref HEAD
-      
-      - uses: actions/checkout@v4
+          echo "Hello from feature branch" > saved.txt
+
+      - name: Move file to temp dir
+        run: |
+          mkdir -p /tmp/mydata
+          mv saved.txt /tmp/mydata/
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
         with:
           ref: main
-      - name : Run a one-line script
+
+      - name: Use the file from feature branch
         run: |
-          git rev-parse --abbrev-ref HEAD
-
-
-
+          cp /tmp/mydata/saved.txt .
+          cat saved.txt
