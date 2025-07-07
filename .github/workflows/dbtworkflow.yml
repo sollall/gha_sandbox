@@ -1,3 +1,6 @@
+on:
+  push:
+
 jobs:
   transfer-file-between-branches:
     runs-on: ubuntu-latest
